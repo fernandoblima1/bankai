@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  api:
+    build: ./api/
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./api:/api
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - ENVIRONMENT=${ENVIRONMENT}
+    depends_on:
+      - database
+  
+  database:
+      image: postgres:latest
+      restart: always
+      environment:
+        POSTGRES_USER: ${DB_USERNAME}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_DATABASE}
+      ports:
+        - "5432:5432"
