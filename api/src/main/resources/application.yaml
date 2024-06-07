@@ -33,3 +33,9 @@ logging:
     console: "%yellow([%d{yyyy-MM-dd HH:mm:ss}]) - %clr(%-5level) %cyan(%logger{40}) : %msg %n"
   level:
     org.springframework.web: info
+
+jwt:
+  private:
+    key: ${JWT_PRIVATE_KEY}
+  public:
+    key: ${JWT_PUBLIC_KEY}
