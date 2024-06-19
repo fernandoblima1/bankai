@@ -14,4 +14,8 @@ public class AuthenticationService {
     return jwtService.generateToken(authentication);
   }
 
+  public String logout(Authentication authentication) {
+    return jwtService.generateToken(authentication);
+  }
+
 }

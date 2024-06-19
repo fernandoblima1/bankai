@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UrlDTO {
   String url;
+  String description;
 }
