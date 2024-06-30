@@ -1,21 +1,12 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./pages/error";
+import { ThemeProvider } from "@/components/theme-provider";
+import { RouterManager } from "./router/router-manager";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <div>Hello world!</div>,
-    errorElement: <ErrorPage />,
-  },
-]);
-
-function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-    </>
-  );
-}
+const App = () => (
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <RouterManager />
+    {/* <Loading />
+      <FeedbackDialog /> */}
+  </ThemeProvider>
+);
 
 export default App;
