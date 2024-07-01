@@ -1,25 +1,31 @@
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
+import { Card } from "@/components/ui/card";
+import { useLoading } from "@/components/loading";
 export default function Main() {
   const { keycloak, userInfo } = useContext(AuthContext);
-
-  if (!keycloak) {
-    return <div>Carregando...</div>;
-  }
+  const loading = useLoading();
+  useEffect(() => {
+    if (!keycloak) {
+      loading.show("");
+    } else {
+      loading.hide();
+    }
+  }, [userInfo]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-4">
+    <div className="">
       <h1 className="text-4xl font-bold">Hello, Vite!</h1>
       <h4>Aplicação de Exemplo de Integração com o Pi Login</h4>
       <div className="card">
-        <div>
+        <Card>
           <p>Username: {keycloak?.tokenParsed?.preferred_username}</p>
           <p>Email: {keycloak?.tokenParsed?.email}</p>
           <p>Access Token: {keycloak?.token}</p>
-          <button onClick={() => keycloak?.logout()}>Logout</button>
-        </div>
+        </Card>
         <div>
+          <button onClick={() => keycloak?.logout()}>Logout</button>
           <h4>Informações do usuário</h4>
           {JSON.stringify(userInfo, null, 2)}
         </div>

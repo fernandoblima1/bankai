@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import Keycloak from "keycloak-js";
-
+import loading from "@/components/ui/loading";
 interface UserInfo {
   sub: string;
   email: string;
@@ -36,6 +36,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [keycloak, setKeycloak] = useState<Keycloak | null>(null);
+
   const [authenticated, setAuthenticated] = useState(false);
   const isInitialized = useRef(false);
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -54,12 +55,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
         });
 
-        const auth = await kc.init({ onLoad: "login-required" });
+        const auth = await kc.init({
+          onLoad: "check-sso",
+          silentCheckSsoRedirectUri:
+            window.location.origin + "/silent-check-sso.html",
+          pkceMethod: "S256",
+        });
+
         setKeycloak(kc);
         setAuthenticated(auth);
 
         if (auth) {
-          const userInfo = await kc?.loadUserInfo();
+          const userInfo = await kc.loadUserInfo();
           setUserInfo(userInfo as UserInfo);
         }
       };

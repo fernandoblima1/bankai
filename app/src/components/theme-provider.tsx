@@ -58,7 +58,9 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
+      <div className="p-4 block w-full h-full flex-1 align-middle items-center justify-center ">
+        {children}
+      </div>
     </ThemeProviderContext.Provider>
   );
 }
