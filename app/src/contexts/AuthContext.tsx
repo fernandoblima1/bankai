@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
 
         const auth = await kc.init({
-          onLoad: "check-sso",
+          onLoad: "login-required",
           silentCheckSsoRedirectUri:
             window.location.origin + "/silent-check-sso.html",
           pkceMethod: "S256",
@@ -67,6 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         if (auth) {
           const userInfo = await kc.loadUserInfo();
+          console.log(userInfo);
           setUserInfo(userInfo as UserInfo);
         }
       };

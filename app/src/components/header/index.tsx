@@ -8,11 +8,7 @@ interface ProfileProps {
 }
 
 export const Header: React.FC<ProfileProps> = ({ name, email, imageUrl }) => {
-  return (
-    <div>
-      <ProfileHeader name={name} email={email} imageUrl={imageUrl} />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default Header;
