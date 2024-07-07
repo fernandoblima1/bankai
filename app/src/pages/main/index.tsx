@@ -1,10 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@/contexts/AuthContext";
 import { Card, CardHeader } from "@/components/ui/card";
 import { useLoading } from "@/components/loading";
 import Header from "@/components/header";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +25,7 @@ import { ProfileHeader } from "@/components/profile";
 
 export default function Main() {
   const { keycloak, userInfo } = useContext(AuthContext);
-  const loading = useLoading();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const FormSchema = z.object({
     url: z.string(),
@@ -32,26 +34,39 @@ export default function Main() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-
+  function SkeletonTable() {
+    return (
+      <div className="flex flex-col space-y-3 my-5">
+        <Skeleton className="h-28 w-full bg-slate-200" />
+        <Skeleton className="h-28 w-full bg-slate-200" />
+        <Skeleton className="h-28 w-full bg-slate-200" />
+        <Skeleton className="h-28 w-full bg-slate-200" />
+        <Skeleton className="h-28 w-full bg-slate-200" />
+        <Skeleton className="h-28 w-full bg-slate-200" />
+      </div>
+    );
+  }
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data.url);
     toast({
-      title: "You submitted the following values:",
+      title: "Parabéns! Você acabou de encurtar um link!",
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
+        <div className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <a href="/" className="text-blue-600 font-bold text-2xl">
+            {data.url}
+          </a>
+        </div>
       ),
     });
   }
 
   useEffect(() => {
     if (!keycloak) {
-      loading.show("");
+      setIsLoading(true);
     } else {
-      loading.hide();
+      setIsLoading(false);
     }
-  }, [userInfo, keycloak, loading]);
+  }, [userInfo, keycloak, isLoading]);
 
   return (
     <div className="w-full container">
@@ -59,6 +74,7 @@ export default function Main() {
         name={userInfo.preferred_username}
         email={userInfo.email}
         imageUrl={"https://github.com/shadcn.png"}
+        isLoading={isLoading}
       />
 
       <div className="mt-2">
@@ -79,8 +95,8 @@ export default function Main() {
                     <FormControl>
                       <Input
                         type="url"
-                        className="bg-slate-200"
-                        placeholder="shadcn"
+                        className="bg-slate-200 w-96 text-black"
+                        placeholder="Insira o link que deseja encurtar"
                         {...field}
                       />
                     </FormControl>
@@ -88,15 +104,19 @@ export default function Main() {
                   </FormItem>
                 )}
               />
-              <Button variant={"default"} className="bg-blue-600" type="submit">
-                Submit
+              <Button className="bg-blue-600" type="submit">
+                Encurtar
               </Button>
             </form>
           </Form>
         </Card>
-        <div>
-          <TableShortedUrls />
-        </div>
+        {isLoading ? (
+          <SkeletonTable />
+        ) : (
+          <div className="flex mt-5">
+            <TableShortedUrls />
+          </div>
+        )}
       </div>
     </div>
   );

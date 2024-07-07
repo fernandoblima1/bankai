@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App";
 import "@/globals.css";
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext.tsx";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const baseName = window.__APP_BASE__ || "/";
 

@@ -20,9 +20,11 @@ export function TableShortedUrls() {
             <TableCell>
               <GlobeIcon />
             </TableCell>
-            <TableCell className="font-medium">
-              <div className="font-bold text-2xl">{invoice.shortedUrl}</div>
-              <div>{invoice.url}</div>
+            <TableCell className="font-medium flex flex-col gap-3">
+              <a href={invoice.shortedUrl} className="font-bold text-2xl">
+                {invoice.shortedUrl}
+              </a>
+              <a href={invoice.url}>{invoice.url}</a>
             </TableCell>
           </TableRow>
         ))}
